@@ -25,9 +25,29 @@ export class LocusService {
     const take = query.limit ?? 1000;
     const skip = query.index ?? 0;
 
+    const where: Prisma.RncLocusWhereInput = {
+      ...(query.id && { id: { in: query.id.map(BigInt) } }),
+      ...(query.assemblyId && { assemblyId: query.assemblyId }),
+      ...(query.regionId && {
+        members: {
+          some: {
+            regionId: { in: query.regionId },
+          },
+        },
+      }),
+      ...(query.membershipStatus && {
+        members: {
+          some: {
+            membershipStatus: query.membershipStatus,
+          },
+        },
+      }),
+    };
+
     const findManyArgs: Prisma.RncLocusFindManyArgs = {
       take,
       skip,
+      where,
       include: {
         members: includeMembers,
       },
@@ -35,7 +55,7 @@ export class LocusService {
 
     const [rows, total] = await this.prisma.$transaction([
       this.prisma.rncLocus.findMany(findManyArgs),
-      this.prisma.rncLocus.count({ where: findManyArgs.where }),
+      this.prisma.rncLocus.count({ where }),
     ]) as [LocusWithMembers[], number];
 
     return { rows, total, index: skip, limit: take };
