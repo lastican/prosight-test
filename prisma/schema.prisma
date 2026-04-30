@@ -15,28 +15,30 @@ datasource db {
 }
 
 model RncLocus {
-  id                BigInt           @id
-  assembly_id       String
-  locus_name        String
-  public_locus_name String
-  chromosome        String
-  strand            String
-  locus_start       Int
-  locus_stop        Int
-  member_count      Int
-  members           RncLocusMember[]
+  id               BigInt   @id
+  assemblyId       String   @map("assembly_id")
+  locusName        String   @map("locus_name")
+  publicLocusName  String   @map("public_locus_name")
+  chromosome       String
+  strand           String
+  locusStart       Int      @map("locus_start")
+  locusStop        Int      @map("locus_stop")
+  memberCount      Int      @map("member_count")
+
+  members          RncLocusMember[]
 
   @@map("rnc_locus")
   @@schema("rnacen")
 }
 
 model RncLocusMember {
-  id                BigInt   @id
-  urs_taxid         String
-  region_id         Int
-  locus_id          BigInt
-  membership_status String
-  locus             RncLocus @relation(fields: [locus_id], references: [id])
+  id                BigInt  @id
+  ursTaxid          String   @map("urs_taxid")
+  regionId          Int      @map("region_id")
+  locusId           BigInt   @map("locus_id")
+  membershipStatus  String   @map("membership_status")
+
+  locus             RncLocus @relation(fields: [locusId], references: [id])
 
   @@map("rnc_locus_members")
   @@schema("rnacen")
