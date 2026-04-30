@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+  schemas  = ["rnacen"]
+}
+
+model RncLocus {
+  id                BigInt           @id
+  assembly_id       String
+  locus_name        String
+  public_locus_name String
+  chromosome        String
+  strand            String
+  locus_start       Int
+  locus_stop        Int
+  member_count      Int
+  members           RncLocusMember[]
+
+  @@map("rnc_locus")
+  @@schema("rnacen")
+}
+
+model RncLocusMember {
+  id                BigInt   @id
+  urs_taxid         String
+  region_id         Int
+  locus_id          BigInt
+  membership_status String
+  locus             RncLocus @relation(fields: [locus_id], references: [id])
+
+  @@map("rnc_locus_members")
+  @@schema("rnacen")
+}
