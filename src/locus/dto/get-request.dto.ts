@@ -11,9 +11,9 @@ export enum SideloadingOption {
 }
 
 export enum OrderField {
-  MEMBER_COUNT = 'member_count',
-  LOCUS_START  = 'locus_start',
-  LOCUS_STOP   = 'locus_stop',
+  MEMBER_COUNT = 'memberCount',
+  LOCUS_START  = 'locusStart',
+  LOCUS_STOP   = 'locusStop',
 }
 
 export enum OrderDir {
